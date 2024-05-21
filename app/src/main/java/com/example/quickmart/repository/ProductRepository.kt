@@ -26,14 +26,17 @@ class ProductRepository @Inject constructor(private val api:APIService) {
                 call: Call<List<productsItem>>,
                 response: Response<List<productsItem>>
             ) {
+                if(response.isSuccessful)Log.d("falure", "response falure")
+                if(response.body()==null)Log.d("empty", "empty body")
                 if(response.isSuccessful && response.body()!=null){
                     val productList=response.body()
                     _products.value=NetworkResult.Success(productList!!)
                     Log.d("successful result", productList.toString())
-                }else if(response.errorBody()!=null){
+                }else if(response.errorBody()==null){
                     _products.value=NetworkResult.Error("Something went Wrong")
+                    Log.d("emptyBody","something error")
                 }else{
-
+                    Log.d("donotKnow","something error")
                     _products.value=NetworkResult.Error("Something went Wrong")
                 }
             }
@@ -44,4 +47,65 @@ class ProductRepository @Inject constructor(private val api:APIService) {
             }
         })
     }
+
+    private val _productsByCategory=MutableLiveData<NetworkResult<List<productsItem>>>()
+    val productsByCategory: LiveData<NetworkResult<List<productsItem>>>
+        get() = _productsByCategory
+
+    fun getProductByCategory(category:String){
+        val result=api.getProductsByCategory(category)
+        result.enqueue(object:Callback<List<productsItem>>{
+            override fun onResponse(
+                call: Call<List<productsItem>>,
+                response: Response<List<productsItem>>
+            ) {
+                if(response.isSuccessful && response.body()!=null){
+                    val productList=response.body()
+                    _productsByCategory.value=NetworkResult.Success(productList!!)
+                    Log.d("successful result", productList.toString())
+                }else if(response.errorBody()==null){
+                    _productsByCategory.value=NetworkResult.Error("Something went Wrong")
+                    Log.d("emptyBody","something error")
+                }else{
+                    Log.d("donotKnow","something error")
+                    _productsByCategory.value=NetworkResult.Error("Something went Wrong")
+                }
+            }
+
+            override fun onFailure(call: Call<List<productsItem>>, t: Throwable) {
+                _productsByCategory.value=NetworkResult.Error("Something went Wrong")
+            }
+        })
+    }
+
+    private val _productsByCategoryAtLimit=MutableLiveData<NetworkResult<List<productsItem>>>()
+        val productsByCategoryAtLimit: LiveData<NetworkResult<List<productsItem>>>
+        get() = _productsByCategoryAtLimit
+
+    fun getProductByResponseAtLimit(category: String, limit:Int){
+        val result=api.getProductsByCategoryAtLimit(category, limit)
+        result.enqueue(object:Callback<List<productsItem>>{
+            override fun onResponse(
+                call: Call<List<productsItem>>,
+                response: Response<List<productsItem>>
+            ) {
+                if(response.isSuccessful && response.body()!=null){
+                    val productList=response.body()
+                    _productsByCategoryAtLimit.value=NetworkResult.Success(productList!!)
+                    Log.d("successful result", productList.toString())
+                }else if(response.errorBody()==null){
+                    _productsByCategoryAtLimit.value=NetworkResult.Error("Something went Wrong")
+                    Log.d("emptyBody","something error")
+                }else{
+                    Log.d("donotKnow","something error")
+                    _productsByCategoryAtLimit.value=NetworkResult.Error("Something went Wrong")
+                }
+            }
+
+            override fun onFailure(call: Call<List<productsItem>>, t: Throwable) {
+                _productsByCategoryAtLimit.value=NetworkResult.Error("Something went Wrong")
+            }
+        })
+    }
+
 }

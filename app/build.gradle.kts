@@ -2,8 +2,16 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id ("kotlin-parcelize")
+    id ("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+}
+
+buildscript {
+    dependencies {
+        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.51.1")
+    }
 }
 
 android {
@@ -39,6 +47,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
@@ -92,6 +101,20 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    kapt ("androidx.hilt:hilt-compiler:1.2.0")
+
+    // glide image loader
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    kapt("com.github.bumptech.glide:compiler:4.14.2")
+
+    // image slider
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
+    //circle imageview
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
 }
 // Allow references to generated code
 kapt {

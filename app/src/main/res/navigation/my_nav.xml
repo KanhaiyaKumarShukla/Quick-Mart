@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_categoriesFragment"
             app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_filteredProductsFragment"
+            app:destination="@id/filteredProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -65,4 +68,19 @@
             android:id="@+id/action_categoriesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/filteredProductsFragment"
+        android:name="com.example.quickmart.fragments.FilteredProductsFragment"
+        android:label="fragment_filtered_products"
+        tools:layout="@layout/fragment_filtered_products" >
+
+        <action
+            android:id="@+id/action_filteredProductsFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.quickmart.fragments.ProductDetailFragment"
+        android:label="fragment_product_detail"
+        tools:layout="@layout/fragment_product_detail" />
 </navigation>
