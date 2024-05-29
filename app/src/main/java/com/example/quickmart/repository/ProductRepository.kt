@@ -32,9 +32,9 @@ class ProductRepository @Inject constructor(private val api:APIService) {
                     val productList=response.body()
                     _products.value=NetworkResult.Success(productList!!)
                     Log.d("successful result", productList.toString())
-                }else if(response.errorBody()==null){
+                }else if(response.errorBody()!=null){
                     _products.value=NetworkResult.Error("Something went Wrong")
-                    Log.d("emptyBody","something error")
+                    Log.d("emptyBody",response.errorBody().toString())
                 }else{
                     Log.d("donotKnow","something error")
                     _products.value=NetworkResult.Error("Something went Wrong")
@@ -43,7 +43,7 @@ class ProductRepository @Inject constructor(private val api:APIService) {
 
             override fun onFailure(call: Call<List<productsItem>>, t: Throwable) {
                 Log.e(AppConstant.TAG,"Error Found! api response failed")
-                _products.value=NetworkResult.Error("Something went Wrong")
+                _products.value=NetworkResult.Error(t.message)
             }
         })
     }
@@ -79,10 +79,10 @@ class ProductRepository @Inject constructor(private val api:APIService) {
     }
 
     private val _productsByCategoryAtLimit=MutableLiveData<NetworkResult<List<productsItem>>>()
-        val productsByCategoryAtLimit: LiveData<NetworkResult<List<productsItem>>>
+    val productsByCategoryAtLimit: LiveData<NetworkResult<List<productsItem>>>
         get() = _productsByCategoryAtLimit
 
-    fun getProductByResponseAtLimit(category: String, limit:Int){
+    fun getProductByCategoryAtLimit(category: String, limit:Int){
         val result=api.getProductsByCategoryAtLimit(category, limit)
         result.enqueue(object:Callback<List<productsItem>>{
             override fun onResponse(
@@ -107,5 +107,63 @@ class ProductRepository @Inject constructor(private val api:APIService) {
             }
         })
     }
+
+
+    private val _categories=MutableLiveData<NetworkResult<List<String>>>()
+    val categories: LiveData<NetworkResult<List<String>>>
+        get() = _categories
+
+    fun getCategories() {
+        val result = api.getProductCategories()
+        result.enqueue(object : Callback<List<String>> {
+            override fun onResponse(
+                call: Call<List<String>>,
+                response: Response<List<String>>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val categoriesList = response.body()
+                    _categories.value = NetworkResult.Success(categoriesList!!)
+                    Log.d("successful result", categoriesList.toString())
+
+                    val categoryProductMap = mutableMapOf<String, List<productsItem>>()
+                    for (category in categoriesList) {
+                        val productCall = api.getProductsByCategory(category)
+                        productCall.enqueue(object : Callback<List<productsItem>> {
+                            override fun onResponse(call: Call<List<productsItem>>, response: Response<List<productsItem>>) {
+                                if (response.isSuccessful) {
+                                    val products = response.body()
+                                    products?.let { productList ->
+                                        categoryProductMap[category] = productList
+                                        if (categoryProductMap.size == categoriesList.size) {
+                                            _productsByCategoryMap.value = NetworkResult.Success(categoryProductMap)
+                                        }
+                                    }
+                                } else {
+                                    _productsByCategoryMap.value = NetworkResult.Error("Failed to fetch products for category: $category")
+                                }
+                            }
+                            override fun onFailure(call: Call<List<productsItem>>, t: Throwable) {
+                                _productsByCategoryMap.value = NetworkResult.Error("Failed to fetch products for category: $category")
+                            }
+                        })
+                    }
+                } else if (response.errorBody() == null) {
+                    _categories.value = NetworkResult.Error("Something went Wrong")
+                    Log.d("emptyBody", "something error")
+                } else {
+                    Log.d("donotKnow", "something error")
+                    _categories.value = NetworkResult.Error("Something went Wrong")
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                _categories.value = NetworkResult.Error("Something went Wrong")
+            }
+        })
+    }
+
+    private val _productsByCategoryMap = MutableLiveData<NetworkResult<Map<String, List<productsItem>>>>()
+    val productsByCategoryMap: LiveData<NetworkResult<Map<String, List<productsItem>>>>
+        get() = _productsByCategoryMap
 
 }

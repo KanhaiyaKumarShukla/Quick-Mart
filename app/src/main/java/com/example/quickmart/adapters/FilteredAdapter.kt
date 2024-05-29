@@ -18,6 +18,8 @@ class FilteredAdapter (
     private val productList: List<productsItem>
 ) : RecyclerView.Adapter<FilteredAdapter.ProductViewHolder>() {
 
+    private var onClickListener:OnClickListener? =null
+
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.textViewTitle)
         val priceTextView: TextView = itemView.findViewById(R.id.price_tv)
@@ -47,14 +49,27 @@ class FilteredAdapter (
         holder.priceTextView.text = formatPriceWithIndianCurrency(product.price)
         holder.ratingTextView.text = product.rating.rate.toString()
         holder.ratingCountTextView.text=formatRatingCount(product.rating.count)
+        holder.itemView.setOnClickListener{
+            if(onClickListener!=null){
+                onClickListener!!.onclick(position, product)
+            }
+        }
     }
 
     private fun formatRatingCount(count: Int): String {
         return "($count)"
     }
 
+    fun setOnClickListener(onClickListener:OnClickListener){
+        this.onClickListener=onClickListener
+    }
+
+    interface OnClickListener{
+        fun onclick(position: Int, model:productsItem)
+    }
+
     private fun formatPriceWithIndianCurrency(price: Double): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
-        return format.format(price)
+        val format = NumberFormat.getCurrencyInstance(Locale.US)
+        return format.format(price*74.5)
     }
 }

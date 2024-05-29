@@ -59,8 +59,19 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    implementation("androidx.databinding:databinding-runtime:8.4.0")
+    implementation("androidx.databinding:databinding-runtime:8.4.1")
+
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -72,12 +83,12 @@ dependencies {
 //    implementation ("com.google.dagger:dagger:2.51.1")
 //    kapt ("com.google.dagger:dagger-compiler:2.51.1")
 
-    val lifecycle_version = "2.7.0"
+    val lifecycle_version = "2.8.0"
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    implementation ("androidx.lifecycle:lifecycle-common-java8:2.7.0")
+    implementation ("androidx.lifecycle:lifecycle-common-java8:2.8.0")
 
     //retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
@@ -90,7 +101,6 @@ dependencies {
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
@@ -101,9 +111,10 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    //kapt ("com.google.dagger:hilt-compiler:2.51.1")
 
-    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt ("androidx.hilt:hilt-compiler:1.2.0")
+
+    implementation ("androidx.fragment:fragment-ktx:1.7.1")
 
     // glide image loader
     implementation ("com.github.bumptech.glide:glide:4.14.2")
@@ -114,6 +125,13 @@ dependencies {
 
     //circle imageview
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    // extendable text view
+    implementation ("io.github.glailton.expandabletextview:expandabletextview:1.0.4")
+
+
+    // Shimmer Effect
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
 }
 // Allow references to generated code

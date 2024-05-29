@@ -12,7 +12,20 @@
           "package_name": "com.example.quickmart"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "530510197461-5rj668tn0jfuejaclfreda0j3hnvjvvm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quickmart",
+            "certificate_hash": "65927ace3378f131464e4414686c8ae04ca3484e"
+          }
+        },
+        {
+          "client_id": "530510197461-5u4l0bm9ltcj3qpchb0a72gkhe6qgfh3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD4lGS2ynxgEdfrCJXlGgCGGb-oSxwIOH4"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530510197461-5u4l0bm9ltcj3qpchb0a72gkhe6qgfh3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

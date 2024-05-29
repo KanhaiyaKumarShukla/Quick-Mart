@@ -15,4 +15,11 @@ interface APIService {
 
     @GET("products/category/{category}")
     fun getProductsByCategoryAtLimit(@Path("category") category: String, @Query("limit") limit: Int): Call<List<productsItem>>
+
+    @GET("products/categories")
+    fun getProductCategories(): Call<List<String>>
 }
+// polilines
+// crud operation
+// gio fire
+// bakground services in widgests

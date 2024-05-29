@@ -7,6 +7,7 @@
     <string name="wave_image_description">wave image</string>
     <string name="intro_image_description">intro image</string>
     <string name="title_activity_login_page">LoginPage</string>
+    <string name="default_web_client_id">530510197461-5rj668tn0jfuejaclfreda0j3hnvjvvm.apps.googleusercontent.com</string>
 
     <string name="login_now">Login Now</string>
     <string name="login_text">Please login to continue using app</string>
@@ -32,4 +33,26 @@
     <string name="myCart_image">cart image</string>
     <string name="product_for_you">Products For You</string>
     <string name="more_products">More Products</string>
+    <string name="prodct_image">Product Image\n</string>
+    <string name="share">Share</string>
+    <string name="favorite">Favorite</string>
+    <string name="inclsive_of_all_taxes">inclsive of all taxes</string>
+    <string name="delivery_free">Free Delivery</string>
+    <string name="color_variation_available">Color Variation Available:</string>
+    <string name="excellent">Excellent</string>
+    <string name="average">Average</string>
+    <string name="poor">Poor</string>
+    <string name="very_good">Very Good</string>
+    <string name="your_products">Your Products</string>
+    <string name="discount_string">Upto $10 cashback on your first order</string>
+    <string name="free_delivery_text">Free Delivery on first order - for top categories</string>
+    <string name="easy_returns">Easy Returns</string>
+    <string name="pay_on_delivery">Pay on Delivery</string>
+    <string name="enter_your_password">Enter your password:</string>
+
+    <string name="facebook_app_id">410093911846225</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">56789</string>
+
+
 </resources>

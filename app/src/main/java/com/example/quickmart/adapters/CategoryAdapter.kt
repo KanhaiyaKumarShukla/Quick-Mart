@@ -15,9 +15,10 @@ import com.example.quickmart.R
 import com.example.quickmart.data.model.products
 import com.example.quickmart.data.model.productsItem
 import com.example.quickmart.utils.AppConstant
+import java.util.Locale
 
 
-class CategoryAdapter(private val productList: List<Pair<String, String>>, private val productsItems: List<productsItem>) :
+class CategoryAdapter(private val productList: List<Pair<String, String>>, private val productsItems: Map<String, List<productsItem>>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,16 +41,16 @@ class CategoryAdapter(private val productList: List<Pair<String, String>>, priva
             .into(holder.productImage)
 
         holder.itemView.setOnClickListener {
-//            if(position==1){
-//                it.findNavController().navigate(R.id.action_homeFragment_to_categoriesFragment)
-//                return@setOnClickListener
-//            }
-            val products=AppConstant.filterProducts(productsItems, product.first, null, null, null, null, null)
+            if(position==0){
+                it.findNavController().navigate(R.id.action_homeFragment_to_categoriesFragment)
+                return@setOnClickListener
+            }
+            val products=productsItems[product.first.lowercase(Locale.ROOT)]
             Log.d("products outcome", products.toString())
             Log.d("category: ", product.first)
             val bundle = Bundle().apply {
                 putString("extra Data category", product.first)
-                putParcelableArray("extraData", products.toTypedArray())
+                putParcelableArray("extraData", products?.toTypedArray())
             }
             it.findNavController().navigate(R.id.action_homeFragment_to_filteredProductsFragment, bundle)
         }

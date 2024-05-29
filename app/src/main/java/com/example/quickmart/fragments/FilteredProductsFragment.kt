@@ -49,13 +49,22 @@ class FilteredProductsFragment : Fragment() {
         binding.productRv.layoutManager = layoutManager
 
         val adapter = FilteredAdapter(productsList)
-//        val adapter = FilteredAdapter(productsList) { product ->
-//            // Handle item click event, navigate to DetailFragment passing product data
-//            val bundle=Bundle().apply{
-//                putParcelable("extraData", product)
-//            }
-//            findNavController().navigate(R.id.action_filteredProductsFragment_to_productDetailFragment, bundle)
-//        }
-        binding.productRv.adapter = adapter
+        adapter.setOnClickListener(object:FilteredAdapter.OnClickListener {
+            override fun onclick(position: Int, model: productsItem) {
+                val bundle = Bundle().apply {
+                    putParcelable("extraData", model)
+                }
+                findNavController().navigate(
+                    R.id.action_filteredProductsFragment_to_productDetailFragment,
+                    bundle
+                )
+            }
+        })
+        binding.productRv.adapter=adapter
+
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

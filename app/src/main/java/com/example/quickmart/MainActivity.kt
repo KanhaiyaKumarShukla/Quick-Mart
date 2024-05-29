@@ -17,7 +17,6 @@ import com.example.quickmart.fragments.AccountFragment
 import com.example.quickmart.fragments.CategoriesFragment
 import com.example.quickmart.fragments.HomeFragment
 import com.example.quickmart.fragments.MyOrderFragment
-import com.example.quickmart.utils.MVVMApplication
 import com.example.quickmart.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
 
     private lateinit var binding:ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
@@ -40,9 +38,12 @@ class MainActivity : AppCompatActivity() {
         navHostFragment=supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
 
         navController=navHostFragment.navController
-        NavigationUI.setupWithNavController(
-            binding.btmNaviView, navController
-        )
+        binding.btmNaviView.apply {
+            setupWithNavController(navController)
+        }
+//        NavigationUI.setupWithNavController(
+//            binding.btmNaviView, navController
+//        )
         binding.btmNaviView.setOnNavigationItemSelectedListener{
 
             when(it.itemId){
@@ -75,15 +76,19 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> {
                     binding.btmNaviView.selectedItemId = R.id.nav_home
+                    binding.btmNaviView.visibility=View.VISIBLE
                 }
                 R.id.accountFragment -> {
                     binding.btmNaviView.selectedItemId = R.id.nav_account
+                    binding.btmNaviView.visibility=View.VISIBLE
                 }
                 R.id.myOrderFragment -> {
                     binding.btmNaviView.selectedItemId = R.id.nav_order
+                    binding.btmNaviView.visibility=View.VISIBLE
                 }
                 R.id.categoriesFragment -> {
                     binding.btmNaviView.selectedItemId = R.id.nav_categories
+                    binding.btmNaviView.visibility=View.VISIBLE
                 }
 
                 else -> {

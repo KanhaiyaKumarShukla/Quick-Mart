@@ -5,23 +5,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.quickmart.R
 import com.example.quickmart.adapters.CategoryAdapter
+import com.example.quickmart.adapters.CategoryWiseProductAdapter
+import com.example.quickmart.adapters.FilteredAdapter
 import com.example.quickmart.adapters.SuggestionsAdapter
 import com.example.quickmart.data.model.productsItem
 import com.example.quickmart.databinding.FragmentHomeBinding
 import com.example.quickmart.utils.AppConstant
 import com.example.quickmart.utils.NetworkResult
 import com.example.quickmart.viewmodel.MainViewModel
-import com.example.quickmart.viewmodel.MainViewModelProviderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,25 +30,40 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
 
     @Inject
-    lateinit var mViewModelFactory: MainViewModel.MainViewModelFactory
+    lateinit var mViewModelFactory: MainViewModel.Factory
 
     private lateinit var mViewModel: MainViewModel
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var data: List<productsItem>
+    private lateinit var allData: List<productsItem>
+    private lateinit var categoryWiseData:Map<String, List<productsItem>>
+    private lateinit var allCategories:List<String>
     private lateinit var suggestionsAdapter: SuggestionsAdapter
+    private lateinit var categoryWiseProductAdapter: CategoryWiseProductAdapter
     private var filteredProducts: Map<String, List<productsItem>> = emptyMap()
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var moreProductsAdapter: FilteredAdapter
+    private var categoryWiseLimitedProduct:MutableList<Pair<String, List<productsItem>>> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        if(!AppConstant.isInternetAvailable(requireContext())){
+            navigateToError()
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        binding.cartIv.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_myOrderFragment)
+        }
 
         Glide.with(this)
             .load("https://i.pinimg.com/originals/62/d9/ee/62d9eee8d016b85b6ad3ad2da1ab7e01.png")
@@ -55,19 +71,17 @@ class HomeFragment : Fragment() {
             .override(150, 150)
             .into(binding.greetingIv)
 
-
-        val category = "men's clothing"
-        val limit = 3
-
         mViewModel = ViewModelProvider(this,
-            MainViewModel.providesFactory(mViewModelFactory, category, limit)
+            MainViewModel.providesFactory(mViewModelFactory, null, null)
         )[MainViewModel::class.java]
 
 
 
-        //setupRecyclerView()
-        mViewModel.productsByCategoryAtLimit.observe(viewLifecycleOwner) { result ->
-            data = when (result) {
+
+        setupSearchView()
+
+        mViewModel.productsLiveData.observe(viewLifecycleOwner) { result ->
+            allData = when (result) {
                 is NetworkResult.Success -> {
                     Log.d("data retrieved:", result.data.toString())
                     result.data!!
@@ -78,16 +92,79 @@ class HomeFragment : Fragment() {
                 }
                 is NetworkResult.Loading -> {
                     Log.d("data Retrieved:", "Loading...")
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.dataLayout.visibility = View.INVISIBLE
+                    binding.shimmerLayout.startShimmer()
                     emptyList()
                 }
                 else -> {
                     emptyList()
                 }
             }
-            //setupCategoryView()
         }
-        //setupSearchView()
-        //setupImageSlider()
+        mViewModel.categories.observe(viewLifecycleOwner) { result ->
+            allCategories = when (result) {
+                is NetworkResult.Success -> {
+                    Log.d("data retrieved:", result.data.toString())
+                    result.data!!
+                }
+                is NetworkResult.Error -> {
+                    Log.d("data Retrieved", "error found!")
+                    emptyList()
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("data Retrieved:", "Loading...")
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.dataLayout.visibility = View.INVISIBLE
+                    binding.shimmerLayout.startShimmer()
+                    emptyList()
+                }
+                else -> {
+                    emptyList()
+                }
+            }
+        }
+
+
+        mViewModel.productsByCategoriesMap.observe(viewLifecycleOwner) { result ->
+            categoryWiseData = when (result) {
+                is NetworkResult.Success -> {
+                    Log.d("data retrieved:", result.data.toString())
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.dataLayout.visibility = View.VISIBLE
+                    result.data!!
+                }
+                is NetworkResult.Error -> {
+                    Log.d("data Retrieved", "error found!")
+                    navigateToError()
+                    emptyMap()
+                }
+                is NetworkResult.Loading -> {
+                    Log.d("data Retrieved:", "Loading...")
+                    binding.shimmerLayout.visibility = View.VISIBLE
+                    binding.dataLayout.visibility = View.INVISIBLE
+                    binding.shimmerLayout.startShimmer()
+                    emptyMap()
+                }
+                else -> {
+                    emptyMap()
+                }
+            }
+
+            setupRecyclerView()
+            setupCategoryView()
+            setupImageSlider()
+        }
+
+    }
+
+    private fun navigateToError() {
+        val bundle:Bundle=Bundle().apply{
+            putInt("destination", R.id.action_errorFragment_to_homeFragment)
+        }
+        findNavController().navigate(R.id.action_homeFragment_to_errorFragment, bundle)
+
     }
 
     private fun setupCategoryView() {
@@ -108,14 +185,19 @@ class HomeFragment : Fragment() {
 
         )
 
-        categoryAdapter= CategoryAdapter(category, data)
+        categoryAdapter= CategoryAdapter(category, categoryWiseData)
         binding.categoryRecycleView.adapter=categoryAdapter
+        // set up category wise limited product in list:
+        allCategories.forEach {
+            if(categoryWiseData[it].isNullOrEmpty()) return@forEach
+            val categoryProductsPair: Pair<String, List<productsItem>> = Pair(it, categoryWiseData[it]!!.take(6))
+            categoryWiseLimitedProduct.add(categoryProductsPair)
+
+        }
     }
 
     private fun setupImageSlider() {
         val imageList = ArrayList<SlideModel>() // Create image list
-
-
         imageList.add(SlideModel("https://i.pinimg.com/originals/37/25/23/372523635665a97932a7b365dfd3eaa1.jpg"))
         imageList.add(SlideModel("https://newspaperads.ads2publish.com/wp-content/uploads/2018/04/lifestyle-shopping-mall-flat-25-off-ad-bombay-times-07-04-2018.png"))
         imageList.add(SlideModel("https://mfour.com/wp-content/uploads/2020/06/Spotted-New-Social-Media-Shopping-Habits.jpg"))
@@ -135,7 +217,33 @@ class HomeFragment : Fragment() {
         binding.suggestionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.suggestionsRecyclerView.adapter = suggestionsAdapter
 
+        categoryWiseProductAdapter= CategoryWiseProductAdapter(categoryWiseLimitedProduct, findNavController(), R.id.action_homeFragment_to_productDetailFragment)
+        binding.productForYouRv.layoutManager=LinearLayoutManager(requireContext())
+        binding.productForYouRv.adapter=categoryWiseProductAdapter
 
+        categoryWiseProductAdapter.setOnItemClickListener(object : CategoryWiseProductAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int, model: Pair<String, List<productsItem>>) {
+                val bundle=Bundle().apply{
+                    putString("extra Data category", model.first)
+                    putParcelableArrayList("extraData", ArrayList(model.second))
+                }
+                findNavController().navigate(R.id.action_homeFragment_to_filteredProductsFragment, bundle)
+            }
+        })
+
+        moreProductsAdapter= FilteredAdapter(allData.selectRandomElements(allData.size))
+
+        binding.moreProductRv.layoutManager=GridLayoutManager(requireContext(), 2)
+        binding.moreProductRv.adapter=moreProductsAdapter
+
+        moreProductsAdapter.setOnClickListener(object : FilteredAdapter.OnClickListener{
+            override fun onclick(position: Int, model: productsItem) {
+                val bundle=Bundle().apply{
+                      putParcelable("extraData", model)
+                }
+                findNavController().navigate(R.id.action_homeFragment_to_productDetailFragment, bundle)
+            }
+        })
     }
 
     private fun setupSearchView() {
@@ -143,18 +251,24 @@ class HomeFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && filteredProducts.containsKey(query)) {
                     val products = filteredProducts[query]
+                    binding.dataLayout.visibility=View.VISIBLE
+                    binding.suggestionsRecyclerView.visibility = View.INVISIBLE
                     inflateProductItems(products)
                 }
-                return false
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty()) {
                     suggestionsAdapter.updateSuggestions(emptyList())
-                    binding.suggestionsRecyclerView.visibility = View.GONE
+                    binding.dataLayout.visibility=View.VISIBLE
+                    binding.suggestionsRecyclerView.visibility = View.INVISIBLE
                     return false
                 }
-                filteredProducts = AppConstant.filterProducts(newText, data)
+                binding.dataLayout.visibility=View.INVISIBLE
+                binding.suggestionsRecyclerView.visibility = View.VISIBLE
+                filteredProducts = AppConstant.filterProducts(newText, allData)
+                //Log.d("query: ", filteredProducts.toString())
                 displaySuggestions(filteredProducts)
                 return true
             }
@@ -163,21 +277,58 @@ class HomeFragment : Fragment() {
 
     private fun displaySuggestions(filteredProducts: Map<String, List<productsItem>>) {
         val suggestions = filteredProducts.keys.toList()
-        suggestionsAdapter.updateSuggestions(suggestions)
         binding.suggestionsRecyclerView.visibility = if (suggestions.isEmpty()) View.GONE else View.VISIBLE
+        suggestionsAdapter.updateSuggestions(suggestions)
     }
 
     private fun inflateProductItems(products: List<productsItem>?) {
         // Implement the logic to inflate product items based on the productIds
 
-        products?.forEach { product ->
-            Log.d("Product", "ID: ${product.id}, Title: ${product.title}")
+        binding.searchedItemsRecyclerView.visibility=if(products.isNullOrEmpty())View.INVISIBLE else View.VISIBLE
+        if(!products.isNullOrEmpty() && products.size>1) {
+            binding.dataLayout.visibility=View.INVISIBLE
+            val adapter=FilteredAdapter(products)
+            val layoutManager= GridLayoutManager(requireContext(), 2)
+
+            // Set the LayoutManager and adapter for the RecyclerView
+            binding.searchedItemsRecyclerView.layoutManager = layoutManager
+
+            binding.searchedItemsRecyclerView.adapter = adapter
+
+            adapter.setOnClickListener(object : FilteredAdapter.OnClickListener{
+                override fun onclick(position: Int, model: productsItem) {
+                    val bundle=Bundle().apply{
+                        putParcelable("extraData", model)
+                    }
+                    findNavController().navigate(R.id.action_homeFragment_to_productDetailFragment, bundle)
+                }
+            })
+        }else if(products?.size==1){
+            val bundle=Bundle().apply{
+                putParcelable("extraData", products[0])
+            }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailFragment, bundle)
         }
 
+    }
+
+    private fun <T> List<T>.selectRandomElements(numElements: Int): List<T> {
+        val shuffledList = this.shuffled() // Shuffle the list
+        return shuffledList.take(numElements) // Select the first numElements from the shuffled list
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+    override fun onResume() {
+        binding.shimmerLayout.startShimmer()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        binding.shimmerLayout.stopShimmer()
+        super.onPause()
+    }
+
 }

@@ -1,0 +1,156 @@
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
+
+class RegisterActivity : AppCompatActivity() {
+
+    private lateinit var emailOrPhoneEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var registerButton: Button
+
+    private lateinit var auth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register)
+
+        auth = FirebaseAuth.getInstance()
+
+        emailOrPhoneEditText = findViewById(R.id.emailOrPhoneEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+        registerButton = findViewById(R.id.registerButton)
+
+        registerButton.setOnClickListener {
+            val emailOrPhone = emailOrPhoneEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            if (emailOrPhone.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter email/phone and password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (emailOrPhone.contains("@")) {
+                registerWithEmail(emailOrPhone, password)
+            } else {
+                registerWithPhone(emailOrPhone, password)
+            }
+        }
+    }
+
+    private fun registerWithEmail(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    sendEmailVerification()
+                } else {
+                    Toast.makeText(this, "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun sendEmailVerification() {
+        val user = auth.currentUser
+        user?.sendEmailVerification()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Verification email sent", Toast.LENGTH_SHORT).show()
+                    // Proceed to verification step
+                } else {
+                    Toast.makeText(this, "Failed to send verification email", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun registerWithPhone(phone: String, password: String) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            phone,
+            60,
+            TimeUnit.SECONDS,
+            this,
+            object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    // Auto-retrieval or instant verification
+                }
+
+                override fun onVerificationFailed(e: FirebaseException) {
+                    Toast.makeText(this@RegisterActivity, "Verification failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+                    val intent = Intent(this@RegisterActivity, VerifyActivity::class.java)
+                    intent.putExtra("verificationId", verificationId)
+                    intent.putExtra("password", password)
+                    startActivity(intent)
+                }
+            }
+        )
+    }
+}
+
+
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthProvider
+
+class VerifyActivity : AppCompatActivity() {
+
+    private lateinit var verificationCodeEditText: EditText
+    private lateinit var verifyButton: Button
+
+    private lateinit var auth: FirebaseAuth
+    private var verificationId: String? = null
+    private var password: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_verify)
+
+        auth = FirebaseAuth.getInstance()
+
+        verificationCodeEditText = findViewById(R.id.verificationCodeEditText)
+        verifyButton = findViewById(R.id.verifyButton)
+
+        verificationId = intent.getStringExtra("verificationId")
+        password = intent.getStringExtra("password")
+
+        verifyButton.setOnClickListener {
+            val code = verificationCodeEditText.text.toString()
+            if (code.isNotEmpty() && verificationId != null) {
+                verifyPhoneNumberWithCode(verificationId!!, code)
+            } else {
+                Toast.makeText(this, "Please enter the verification code", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun verifyPhoneNumberWithCode(verificationId: String, code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId, code)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    user?.updatePassword(password!!)?.addOnCompleteListener { updateTask ->
+                        if (updateTask.isSuccessful) {
+                            Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
+                            // Redirect to login or main activity
+                        } else {
+                            Toast.makeText(this, "Failed to set password", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Verification failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+}
