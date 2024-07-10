@@ -42,20 +42,21 @@ Kanhaiya Kumar
 
 Project Link: https://github.com/KanhaiyaKumarShukla/Quick-Mart/
 
+![IMG-20240710-WA0004](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/41149e54-b5c5-4cfb-b7ca-88aa5d7d0542)
 ![IMG-20240710-WA0003 (1)](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/cee41765-1887-408c-a2ed-fb7ebd87ee37)
+![IMG-20240710-WA0005](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/92f54059-6731-4ab1-b286-f304fd656b3e)
+![IMG-20240710-WA0006](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/e0b18e60-1c83-4929-b456-6336fb3a604d)
+![IMG-20240710-WA0007](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/a7bc5fdf-31d7-42f5-a0c2-23364184868b)
+![IMG-20240710-WA0008](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/6df2057c-2acf-4d68-89fc-d485e51fa3ed)
+![IMG-20240710-WA0009](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/37b04011-2c54-4914-a17f-f14db667ea7e)
+![IMG-20240710-WA0010](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/a8be889b-dd2b-494f-b72d-c8d1c0e0fcf1)
+![IMG-20240710-WA0011](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/30dd0b73-4d8f-4520-a5e9-07255c692385)
+![IMG-20240710-WA0012](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/089cc6b4-75eb-4b1d-b7c4-7ac05d1e29b2)
+![IMG-20240710-WA0013](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/0e596673-ce00-486d-b117-a71369873d23)
+![IMG-20240710-WA0014](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/58255ed8-eece-414c-afc0-22acda6fdea0)
+![IMG-20240710-WA0015](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/6a0e9620-87cf-4da9-aabb-de12b22ab499)
 
-![IMG-20240710-WA0003](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/3d783462-3d78-41de-87b0-fb1b9c96e44a)
 
-![IMG-20240710-WA0004](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/2ba012fe-ac93-4cf2-baa2-b65c62dd138f)
-![IMG-20240710-WA0003](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/8033b0c2-7c90-4a42-a1d3-62c5b1afcd57)
-![IMG-20240710-WA0005](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/847fc353-e38b-4357-aa85-0a9edf15bf0d)
-![IMG-20240710-WA0006](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/e18d27bb-edb2-4114-b672-c7f3faf6c7bb)
-![IMG-20240710-WA0007](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/4b5da77d-4f0f-4abd-a594-9b4ad9afe042)
-![IMG-20240710-WA0008](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/c662c3f1-b978-45fb-a66e-0880e62d248b)
-![IMG-20240710-WA0009](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/4b901ab4-94fa-448f-8a22-d799d8c1c719)
-![IMG-20240710-WA0010](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/bc0626de-ce49-4a3a-b56f-e25350787727)
-![IMG-20240710-WA0011](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/b71b840c-22f5-4b58-8cea-09daaa06af86)
-![IMG-20240710-WA0012](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/adb32f07-918b-4f74-b297-1b5ea32808c2)
-![IMG-20240710-WA0013](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/bca5192f-dd3b-45df-85f7-52bffd8b54c7)
-![IMG-20240710-WA0014](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/d2629d5d-caee-419b-9010-a7684eaa916e)
-![IMG-20240710-WA0015](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/b83fc821-1909-402a-9c23-38643779899c)
+
+
+
