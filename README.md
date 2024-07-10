@@ -42,6 +42,8 @@ Kanhaiya Kumar
 
 Project Link: https://github.com/KanhaiyaKumarShukla/Quick-Mart/
 
+![IMG-20240710-WA0003 (1)](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/cee41765-1887-408c-a2ed-fb7ebd87ee37)
+
 ![IMG-20240710-WA0003](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/3d783462-3d78-41de-87b0-fb1b9c96e44a)
 
 ![IMG-20240710-WA0004](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/2ba012fe-ac93-4cf2-baa2-b65c62dd138f)
