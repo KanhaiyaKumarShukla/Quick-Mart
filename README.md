@@ -9,6 +9,7 @@ Quick Mart is a sophisticated e-commerce application designed to offer users a s
 - **Architecture**: Follows MVVM (Model-View-ViewModel) architecture for efficient code organization.
 - **Dependency Injection**: Utilizes Dagger 2 and Hilt for managing dependencies.
 - **Network Requests**: Uses Retrofit for handling API requests.
+- **Search Functionality**: Allows users to search for products by name, category, or brand.
 
 
 
