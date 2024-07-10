@@ -68,6 +68,11 @@ Project Link: https://github.com/KanhaiyaKumarShukla/Quick-Mart/
 ### Account
 ![IMG-20240710-WA0012](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/089cc6b4-75eb-4b1d-b7c4-7ac05d1e29b2)
 
+### Take User Details
+![user address 1](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/b6fd9e71-07e7-4d4a-ae50-b02dd4be1593)
+![user address 2](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/74cd1436-4f4c-4a7b-989f-d6c8e2369621)
+
+
 ### Login Page
 ![IMG-20240710-WA0013](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/0e596673-ce00-486d-b117-a71369873d23)
 
@@ -77,7 +82,7 @@ Project Link: https://github.com/KanhaiyaKumarShukla/Quick-Mart/
 ### SignUp Page
 ![IMG-20240710-WA0015](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/6a0e9620-87cf-4da9-aabb-de12b22ab499)
 
-
-
+### Error Page
+![error page](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/e717187f-4567-4a22-b0ea-7a75da776fe0)
 
 
