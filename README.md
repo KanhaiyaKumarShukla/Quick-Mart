@@ -42,8 +42,10 @@ Kanhaiya Kumar
 
 Project Link: https://github.com/KanhaiyaKumarShukla/Quick-Mart/
 
-## Screen Sorts
+## Screenshots
+Splash Screen
 ![IMG-20240710-WA0004](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/41149e54-b5c5-4cfb-b7ca-88aa5d7d0542)
+Home Screen
 ![IMG-20240710-WA0003 (1)](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/cee41765-1887-408c-a2ed-fb7ebd87ee37)
 ![IMG-20240710-WA0005](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/92f54059-6731-4ab1-b286-f304fd656b3e)
 ![IMG-20240710-WA0006](https://github.com/KanhaiyaKumarShukla/Quick-Mart/assets/148223010/e0b18e60-1c83-4929-b456-6336fb3a604d)
